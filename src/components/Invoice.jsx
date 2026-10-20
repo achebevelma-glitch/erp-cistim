@@ -10,7 +10,7 @@ const METHOD_LABELS = {
 };
 const STATUS_LABELS = { DUE: 'Due', PAID: 'Paid', REFUNDED: 'Refunded' };
 
-export default function Invoice({ invoice, onBack }) {
+export default function Invoice({ invoice, onBack, onMarkPaid, paying }) {
   return (
     <div className="panel invoice">
       <div className="invoice-head">
@@ -70,8 +70,20 @@ export default function Invoice({ invoice, onBack }) {
         <span>Status</span>
         <span>{STATUS_LABELS[invoice.status] || invoice.status}</span>
       </div>
+      {invoice.paidAt && (
+        <div className="summary-line">
+          <span>Paid on</span>
+          <span>{new Date(invoice.paidAt).toLocaleDateString()}</span>
+        </div>
+      )}
 
       <div className="invoice-actions no-print">
+        {onMarkPaid && invoice.status === 'DUE' && (
+          <button type="button" className="btn-primary" onClick={onMarkPaid} disabled={paying}>
+            <span className="material-symbols-sharp">paid</span>
+            {paying ? 'Saving…' : 'Mark as paid'}
+          </button>
+        )}
         <button type="button" className="btn-primary" onClick={() => window.print()}>
           <span className="material-symbols-sharp">print</span>
           Print / Save as PDF
