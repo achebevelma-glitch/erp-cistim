@@ -114,7 +114,7 @@ export default function CreateAccount() {
   return (
     <div className="login-card">
       <div className="logo">
-        ERP<span className="danger">CISTIM</span>
+        ElectroTrack<span className="danger">ERP</span>
       </div>
 
       <p className="subtitle">Create your ERP account</p>
