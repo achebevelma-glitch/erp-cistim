@@ -4,7 +4,7 @@ import ThemeToggler from '../components/ThemeToggler.jsx';
 import Modal, { ModalError } from '../components/Modal.jsx';
 import { API_BASE_URL, authFetch, unwrap } from '../api.js';
 import { usePageStyles, useTitle } from '../hooks.js';
-import { formatStatus, num, shippingClass } from '../utils.js';
+import { formatCents, formatStatus, num, shippingClass } from '../utils.js';
 import css from '../styles/order.css?inline';
 
 const ORDERS_ENDPOINT = `${API_BASE_URL}/orders`;
@@ -307,7 +307,7 @@ export default function Orders() {
                 </div>
                 <div className="view-detail-row">
                   <span>Amount</span>
-                  <span>${(Number(detail.amountCents || 0) / 100).toFixed(2)}</span>
+                 <span>{formatCents(detail.amountCents)}</span>
                 </div>
                 <div className="view-detail-row">
                   <span>Payment</span>
