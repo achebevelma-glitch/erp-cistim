@@ -4,10 +4,10 @@ import ThemeToggler from '../components/ThemeToggler.jsx';
 import Modal, { ModalError } from '../components/Modal.jsx';
 import { API_BASE_URL, authFetch, unwrap } from '../api.js';
 import { usePageStyles, useTitle } from '../hooks.js';
-import { customerInitials, num } from '../utils.js';
+import { customerInitials, formatCents, num } from '../utils.js';
 import css from '../styles/customer.css?inline';
 
-const formatOrderAmount = (amountCents) => `$${(Number(amountCents || 0) / 100).toFixed(2)}`;
+const formatOrderAmount = formatCents;
 
 const orderCount = (customer) => {
   if (customer.orderCount != null) return customer.orderCount;
