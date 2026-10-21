@@ -4,7 +4,7 @@ import ThemeToggler from '../components/ThemeToggler.jsx';
 import Modal, { ModalError } from '../components/Modal.jsx';
 import { API_BASE_URL, authFetch } from '../api.js';
 import { usePageStyles, useTitle } from '../hooks.js';
-import { formatStatus } from '../utils.js';
+import { CURRENCY, formatCents, formatStatus } from '../utils.js';
 import css from '../styles/transaction.css?inline';
 
 const todayISO = () => new Date().toISOString().slice(0, 10);
@@ -17,9 +17,8 @@ const emptyForm = () => ({
 });
 
 function formatAmount(amountCents, type) {
-  const amount = Number(amountCents || 0) / 100;
   const sign = type === 'income' ? '+' : '-';
-  return `${sign}$${amount.toFixed(2)}`;
+  return `${sign}${formatCents(amountCents)}`;
 }
 
 export default function Transactions() {
@@ -31,10 +30,10 @@ export default function Transactions() {
 
   // Placeholder figures shown until the summary arrives (same as the HTML).
   const [summary, setSummary] = useState({
-    revenue: '$84,230',
-    expenses: '$41,870',
-    profit: '$42,360',
-  });
+  revenue: formatCents(0),
+  expenses: formatCents(0),
+  profit: formatCents(0),
+});
 
   const [addOpen, setAddOpen] = useState(false);
   const [addError, setAddError] = useState('');
@@ -62,9 +61,9 @@ export default function Transactions() {
       const s = await response.json();
       console.log('Accounting summary:', s);
       setSummary({
-        revenue: `$${(Number(s.revenueCents || 0) / 100).toFixed(2)}`,
-        expenses: `$${(Number(s.expensesCents || 0) / 100).toFixed(2)}`,
-        profit: `$${(Number(s.netProfitCents || 0) / 100).toFixed(2)}`,
+        revenue: formatCents(s.revenueCents),
+        expenses: formatCents(s.expensesCents),
+        profit: formatCents(s.netProfitCents),
       });
     } catch (error) {
       console.error('Error loading accounting summary:', error);
@@ -271,7 +270,7 @@ export default function Transactions() {
               />
             </div>
             <div className="field">
-              <label htmlFor="new-transaction-amount">Amount ($)</label>
+              <label htmlFor="new-transaction-amount">Amount ({CURRENCY})</label>
               <input
                 type="number"
                 id="new-transaction-amount"
