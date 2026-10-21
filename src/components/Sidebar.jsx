@@ -40,7 +40,7 @@ export default function Sidebar({
     <aside style={open === undefined ? undefined : { display: open ? 'block' : 'none' }}>
       <div className="top">
         <h2 className="logo">
-          ERP<span className="danger">CISTIM</span>
+          ElectroTrack<span className="danger">ERP</span>
         </h2>
         <div className="close" id="close-btn" onClick={onClose}>
           <span className="material-symbols-sharp">close</span>
