@@ -19,7 +19,8 @@ export default function Invoices() {
   const [list, setList] = useState([]);
   const [state, setState] = useState('loading');
   const [selected, setSelected] = useState(null);
-  const [paying, setPaying] = useState(false);
+  const [busy, setBusy] = useState(false);
+  const [restock, setRestock] = useState(true);
   const [actionError, setActionError] = useState('');
 
   useEffect(() => {
@@ -36,30 +37,71 @@ export default function Invoices() {
     })();
   }, [isAdmin]);
 
-  const markPaid = async () => {
-    if (!selected || paying) return;
-    setPaying(true);
+  const act = async (path, options, fallback) => {
+    if (!selected || busy) return;
+    setBusy(true);
     setActionError('');
     try {
-      const response = await authFetch(`${API_BASE_URL}/invoices/${selected.id}/pay`, {
-        method: 'PATCH',
-      });
+      const response = await authFetch(`${API_BASE_URL}/invoices/${selected.id}/${path}`, options);
       const body = await response.json().catch(() => ({}));
-      if (!response.ok) throw new Error(body.error || `Failed to mark as paid: ${response.status}`);
+      if (!response.ok) throw new Error(body.error || `${fallback} (${response.status})`);
       setSelected(body);
       setList((prev) => prev.map((inv) => (inv.id === body.id ? body : inv)));
     } catch (error) {
       console.error(error);
-      setActionError(error.message || 'Could not mark the invoice as paid.');
+      setActionError(error.message || fallback);
     } finally {
-      setPaying(false);
+      setBusy(false);
     }
+  };
+
+  const markPaid = () => act('pay', { method: 'PATCH' }, 'Could not mark as paid');
+
+  const refund = () => {
+    if (!window.confirm('Refund this invoice? This cannot be undone.')) return;
+    act(
+      'refund',
+      {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ restock }),
+      },
+      'Could not refund'
+    );
   };
 
   const back = () => {
     setSelected(null);
     setActionError('');
   };
+
+  const actions =
+    isAdmin && selected ? (
+      <>
+        {selected.status === 'DUE' && (
+          <button type="button" className="btn-primary" onClick={markPaid} disabled={busy}>
+            <span className="material-symbols-sharp">paid</span>
+            {busy ? 'Saving…' : 'Mark as paid'}
+          </button>
+        )}
+        {selected.status === 'PAID' && (
+          <>
+            <label className="restock-option">
+              <input
+                type="checkbox"
+                checked={restock}
+                onChange={(e) => setRestock(e.target.checked)}
+              />
+              Return items to stock
+            </label>
+            <button type="button" className="btn-secondary" onClick={refund} disabled={busy}>
+              <span className="material-symbols-sharp">undo</span>
+              {busy ? 'Saving…' : 'Refund'}
+            </button>
+          </>
+        )}
+      </>
+    ) : null;
 
   return (
     <div className="product-container">
@@ -78,12 +120,7 @@ export default function Invoices() {
                 {actionError}
               </div>
             )}
-            <Invoice
-              invoice={selected}
-              onBack={back}
-              onMarkPaid={isAdmin ? markPaid : undefined}
-              paying={paying}
-            />
+            <Invoice invoice={selected} onBack={back} actions={actions} />
           </>
         ) : (
           <div className="panel" style={{ marginTop: '1.5rem' }}>
