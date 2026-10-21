@@ -9,6 +9,7 @@ import { getRole } from '../useCurrentUser.js';
 import { usePageStyles, useTitle } from '../hooks.js';
 import css from '../styles/product.css?inline';
 import cartCss from '../styles/cart.css?inline';
+import { CURRENCY, formatMoney } from '../utils.js';
 
 const PRODUCTS_ENDPOINT = `${API_BASE_URL}/products`;
 const PRODUCTS_LIST_URL = `${PRODUCTS_ENDPOINT}?size=500&sort=id,desc`;
@@ -152,7 +153,7 @@ export default function Products() {
                     {product.category?.name || product.category || 'Uncategorized'}
                   </span>
                   <div className="price-row">
-                    <span className="price">${price.toFixed(2)}</span>
+                    <span className="price">{formatMoney(price)}</span>
                   </div>
 
                   <div className="card-actions">
@@ -214,7 +215,7 @@ export default function Products() {
                 />
               </div>
               <div className="field">
-                <label htmlFor="new-product-price">Price ($)</label>
+                <label htmlFor="new-product-price">Price ({CURRENCY})</label>
                 <input
                   type="number"
                   id="new-product-price"
