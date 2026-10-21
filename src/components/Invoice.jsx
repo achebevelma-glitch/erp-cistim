@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom';
 
-export const money = (cents) => `$${(Number(cents || 0) / 100).toFixed(2)}`;
+import { formatCents } from '../utils.js';
+
+export const money = formatCents;
 
 const METHOD_LABELS = {
   card: 'Credit / debit card',
@@ -10,7 +12,7 @@ const METHOD_LABELS = {
 };
 const STATUS_LABELS = { DUE: 'Due', PAID: 'Paid', REFUNDED: 'Refunded' };
 
-export default function Invoice({ invoice, onBack, onMarkPaid, paying }) {
+export default function Invoice({ invoice, onBack, actions }) {
   return (
     <div className="panel invoice">
       <div className="invoice-head">
@@ -76,14 +78,15 @@ export default function Invoice({ invoice, onBack, onMarkPaid, paying }) {
           <span>{new Date(invoice.paidAt).toLocaleDateString()}</span>
         </div>
       )}
+      {invoice.refundedAt && (
+        <div className="summary-line">
+          <span>Refunded on</span>
+          <span>{new Date(invoice.refundedAt).toLocaleDateString()}</span>
+        </div>
+      )}
 
       <div className="invoice-actions no-print">
-        {onMarkPaid && invoice.status === 'DUE' && (
-          <button type="button" className="btn-primary" onClick={onMarkPaid} disabled={paying}>
-            <span className="material-symbols-sharp">paid</span>
-            {paying ? 'Saving…' : 'Mark as paid'}
-          </button>
-        )}
+        {actions}
         <button type="button" className="btn-primary" onClick={() => window.print()}>
           <span className="material-symbols-sharp">print</span>
           Print / Save as PDF
