@@ -91,3 +91,11 @@
 .invoice-list .num { text-align: right; }
 .invoice-list tr.clickable { cursor: pointer; }
 .invoice-list tr.clickable:hover { background: var(--color-light); }
+
+.restock-option {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.85rem; 
+  color: var(--color-dark-variant); 
+}
