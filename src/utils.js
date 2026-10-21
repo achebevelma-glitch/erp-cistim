@@ -39,16 +39,19 @@ export function stockClass(status) {
   return 'in-stock';
 }
 
-export const num = (n) => Number(n).toLocaleString('en-US');
-
-export const dollars = (cents) => `$${(Number(cents || 0) / 100).toFixed(2)}`;
+export const CURRENCY = 'Ksh';
 
 export function formatMoney(amount) {
-  return `$${Number(amount || 0).toLocaleString('en-US', {
+  return `${CURRENCY} ${Number(amount || 0).toLocaleString('en-KE', {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   })}`;
 }
+// Whole-number formatting for stat cards, e.g. 1,250
+export const num = (n) => Number(n || 0).toLocaleString('en-KE');
+
+// Takes cents (the unit the API stores), returns e.g. "Ksh 1,250.00"
+export const formatCents = (cents) => formatMoney(Number(cents || 0) / 100);
 
 export function timeAgo(dateString) {
   const diff = Date.now() - new Date(dateString).getTime();
