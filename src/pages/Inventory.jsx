@@ -4,7 +4,7 @@ import ThemeToggler from '../components/ThemeToggler.jsx';
 import Modal, { ModalError } from '../components/Modal.jsx';
 import { API_BASE_URL, authFetch } from '../api.js';
 import { usePageStyles, useTitle } from '../hooks.js';
-import { num, stockClass, stockLabel } from '../utils.js';
+import { CURRENCY, num, stockClass, stockLabel } from '../utils.js';
 import css from '../styles/inventory.css?inline';
 
 const INVENTORY_ENDPOINT = `${API_BASE_URL}/inventory`;
@@ -313,7 +313,7 @@ export default function Inventory() {
               />
             </div>
             <div className="field">
-              <label htmlFor="new-product-price">Price ($)</label>
+              <label htmlFor="new-product-price">Price ({CURRENCY})</label>
               <input
                 type="number"
                 id="new-product-price"
