@@ -1,0 +1,78 @@
+/* Signed-in user, pinned to the bottom of the sidebar on every page.
+   Uses the same CSS variables as the page stylesheets, so it follows the theme. */
+
+.sidebar .user-card {
+  position: absolute;
+  left: 1rem;
+  right: 1rem;
+  bottom: 6.4rem;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 0.7rem 0.8rem;
+  border-radius: var(--border-radius-2);
+  background-color: var(--color-light);
+  color: var(--color-dark);
+  min-width: 0;
+}
+
+.sidebar .user-card .user-avatar {
+  flex-shrink: 0;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-primary);
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.sidebar .user-card .user-info {
+  min-width: 0;
+  line-height: 1.3;
+}
+
+.sidebar .user-card .user-name,
+.sidebar .user-card .user-meta {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sidebar .user-card .user-name {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-dark);
+}
+
+.sidebar .user-card .user-meta {
+  font-size: 0.72rem;
+  color: var(--color-dark-variant);
+}
+
+/* Dashboard collapses the sidebar to icons between 769px and 1200px. */
+@media screen and (min-width: 769px) and (max-width: 1200px) {
+  .dash-container .sidebar .user-card {
+    left: 0;
+    right: auto;
+    width: 5.6rem;
+    justify-content: center;
+    background: transparent;
+    padding: 0;
+  }
+  .dash-container .sidebar .user-card .user-info {
+    display: none;
+  }
+}
+
+/* Mobile drawer / stacked layouts: flow naturally above Logout. */
+@media screen and (max-width: 768px) {
+  .sidebar .user-card {
+    position: static;
+    margin: 0.6rem 1rem;
+  }
+}

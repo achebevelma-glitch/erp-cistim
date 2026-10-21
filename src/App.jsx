@@ -7,13 +7,10 @@ import Inventory from './pages/Inventory.jsx';
 import Orders from './pages/Orders.jsx';
 import Transactions from './pages/Transactions.jsx';
 import Products from './pages/Products.jsx';
-import ProtectedRoute from './components/ProtectedRoute.jsx';
 import Checkout from './pages/Checkout.jsx';
-import HomeRedirect from './components/HomeRedirect.jsx';
 import Invoices from './pages/Invoices.jsx';
-
-
-
+import ProtectedRoute from './components/ProtectedRoute.jsx';
+import HomeRedirect from './components/HomeRedirect.jsx';
 
 const admin = ['ADMIN'];
 const any = ['ADMIN', 'USER'];
@@ -21,22 +18,22 @@ const any = ['ADMIN', 'USER'];
 export default function App() {
   return (
     <Routes>
-      <Route path="/" element={<Navigate to="/dashboard" replace />} />
+      {/* Public */}
+      <Route path="/" element={<HomeRedirect />} />
       <Route path="/login" element={<Login />} />
       <Route path="/create-account" element={<CreateAccount />} />
 
+      {/* Admin only */}
       <Route path="/dashboard" element={<ProtectedRoute roles={admin}><Dashboard /></ProtectedRoute>} />
       <Route path="/customers" element={<ProtectedRoute roles={admin}><Customers /></ProtectedRoute>} />
       <Route path="/inventory" element={<ProtectedRoute roles={admin}><Inventory /></ProtectedRoute>} />
       <Route path="/orders" element={<ProtectedRoute roles={admin}><Orders /></ProtectedRoute>} />
       <Route path="/transactions" element={<ProtectedRoute roles={admin}><Transactions /></ProtectedRoute>} />
+
+      {/* Admin and customers */}
       <Route path="/products" element={<ProtectedRoute roles={any}><Products /></ProtectedRoute>} />
-
-      <Route path="/" element={<HomeRedirect />} />
-      ...
-      <Route path="*" element={<HomeRedirect />} />
+      <Route path="/checkout" element={<ProtectedRoute roles={any}><Checkout /></ProtectedRoute>} />
       <Route path="/invoices" element={<ProtectedRoute roles={any}><Invoices /></ProtectedRoute>} />
-
 
       {/* Old .html URLs keep working */}
       <Route path="/login.html" element={<Navigate to="/login" replace />} />
@@ -47,9 +44,9 @@ export default function App() {
       <Route path="/order.html" element={<Navigate to="/orders" replace />} />
       <Route path="/transaction.html" element={<Navigate to="/transactions" replace />} />
       <Route path="/product.html" element={<Navigate to="/products" replace />} />
-      <Route path="/checkout" element={<ProtectedRoute roles={any}><Checkout /></ProtectedRoute>} />
 
-      <Route path="*" element={<Navigate to="/dashboard" replace />} />
+      {/* Anything else */}
+      <Route path="*" element={<HomeRedirect />} />
     </Routes>
   );
 }
