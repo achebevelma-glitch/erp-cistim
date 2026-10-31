@@ -23,7 +23,7 @@ export default function Invoice({ invoice, onBack, actions }) {
         </div>
         <div style={{ textAlign: 'right' }}>
           <h3>
-            ERP<span className="danger">CISTIM</span>
+            ElectroTrack<span className="danger">ERP</span>
           </h3>
         </div>
       </div>
