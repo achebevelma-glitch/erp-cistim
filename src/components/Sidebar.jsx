@@ -5,6 +5,7 @@ import { usePageStyles } from '../hooks.js';
 import { initialsOf } from '../utils.js';
 import userCardCss from '../styles/user-card.css?inline';
 import { useCart } from '../CartContext.jsx';
+import NotificationBell from '../components/NotificationBell.jsx';
 
 
 export default function Sidebar({
@@ -23,10 +24,10 @@ export default function Sidebar({
   const { clear: clearCart } = useCart();
 
   const handleLogout = (event) => {
-  event.preventDefault();
-  clearToken();
-  navigate('/login', { replace: true });
-};
+    event.preventDefault();
+    clearToken();
+    navigate('/login', { replace: true });
+  };
 
 
   const link = (key, to, icon, label) => (
@@ -55,6 +56,7 @@ export default function Sidebar({
         {isAdmin && link('transactions', '/transactions', 'calculate', 'Transactions')}
         {link('products', '/products', 'store', 'Products')}
         {link('invoices', '/invoices', 'description', 'Invoices')}
+        {isAdmin && <NotificationBell />}
 
         {user && (
           <div className="user-card" title={user.email || user.name}>
