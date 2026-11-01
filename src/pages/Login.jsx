@@ -2,8 +2,10 @@ import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { usePageStyles, useTitle } from '../hooks.js';
 import css from '../styles/login.css?inline';
+import { API_BASE_URL } from '../api.js';
 
-const LOGIN_ENDPOINT = 'http://localhost:8088/api/auth/login';
+
+const LOGIN_ENDPOINT = `${API_BASE_URL}/auth/login`;
 
 export default function Login() {
   usePageStyles(css);

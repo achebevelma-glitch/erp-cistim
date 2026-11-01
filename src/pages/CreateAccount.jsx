@@ -2,8 +2,9 @@ import { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { usePageStyles, useTitle } from '../hooks.js';
 import css from '../styles/create-account.css?inline';
+import { API_BASE_URL } from '../api.js';
 
-const SIGNUP_ENDPOINT = 'http://localhost:8088/api/auth/register';
+const SIGNUP_ENDPOINT = `${API_BASE_URL}/auth/register`;
 
 function PasswordField({ id, label, value, onChange, autoComplete = 'new-password', toggleId }) {
   const [visible, setVisible] = useState(false);
