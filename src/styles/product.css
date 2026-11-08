@@ -229,7 +229,21 @@
     justify-content: center;
   }
 
-  .product-card .thumb .material-symbols-sharp { font-size: 2.4rem; }
+  .product-card .thumb .material-symbols-sharp 
+  { font-size: 2.4rem; }
+  
+  .product-card .thumb.has-image {
+    height: 11rem;
+    background: #fff;
+    padding: 0.6rem;
+  }
+
+  .product-card .thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+  }
 
   .product-card h3 { font-size: 1rem; }
   .product-card .category { color: var(--color-info-dark); font-size: 0.8rem; }
