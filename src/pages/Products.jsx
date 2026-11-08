@@ -10,6 +10,7 @@ import { usePageStyles, useTitle } from '../hooks.js';
 import css from '../styles/product.css?inline';
 import cartCss from '../styles/cart.css?inline';
 import { CURRENCY, formatMoney } from '../utils.js';
+import { getProductImage } from '../productImages.js';
 
 const PRODUCTS_ENDPOINT = `${API_BASE_URL}/products`;
 const PRODUCTS_LIST_URL = `${PRODUCTS_ENDPOINT}?size=500&sort=id,desc`;
@@ -142,11 +143,30 @@ export default function Products() {
             filtered.map((product) => {
               const price = Number(product.priceCents || 0) / 100;
               const inCart = has(product.id);
+              const image = getProductImage(product);
 
               return (
                 <div className="product-card" key={product.id}>
-                  <div className="thumb">
-                    <span className="material-symbols-sharp">inventory_2</span>
+                  <div className={image ? 'thumb has-image' : 'thumb'}>
+                    {image ? (
+                      <img
+                        src={image}
+                        alt={product.name || 'Product'}
+                        loading="lazy"
+                        onError={(e) => {
+                          // picture missing: show the icon instead of a broken image
+                          e.currentTarget.parentElement.classList.remove('has-image');
+                          e.currentTarget.replaceWith(
+                            Object.assign(document.createElement('span'), {
+                              className: 'material-symbols-sharp',
+                              textContent: 'inventory_2',
+                            }),
+                          );
+                        }}
+                      />
+                    ) : (
+                      <span className="material-symbols-sharp">inventory_2</span>
+                    )}
                   </div>
                   <h3>{product.name || 'Unnamed Product'}</h3>
                   <span className="category">
